@@ -1,0 +1,67 @@
+
+Hello <%= @user.first_name %>
+<br>
+<br>
+
+<div class="right">
+  <h3>Sell a Shoe</h3>
+    <form action="/shoes" method="post">
+        <input type="hidden" name="authenticity_token" value="<%= form_authenticity_token %>">
+            <label for="shoe[name]">Name:</label> <input type="text" name="shoe[name]" value=""><br>
+            <label for="shoe[price]">Price:</label> <input type="text" name="shoe[price]" value=""><br><br>
+        <input class="function" type="submit" name="" value="Sell Shoe"><br>
+    </form>
+</div>
+<br>
+<br>
+
+Your shoes that have not yet sold!
+<table>
+    <tr>
+        <th>Shoe Name</th>
+        <th>Price</th>
+        <th>Seller</th>
+        <th>Action</th>
+    </tr>
+        <% @shoes.each do |shoe| %>
+          <% if shoe.user == current_user %>
+            <tr>
+                <td><%= shoe.name %></td>
+                <td><%= shoe.price %></td>
+                <td><%= shoe.user.first_name %></td>
+
+
+                <td><form action="/shoes/<%= shoe.id %>" method="post">
+                    <input type="hidden" name="authenticity_token" value="<%= form_authenticity_token %>">
+                    <input type="hidden" name="_method" value="delete">
+                    <input class="link" type="submit" name="" value="Delete">
+                    </form>
+                </td>
+        <% end %>
+      <% end %>
+</table>
+<br>
+<br>
+<br>
+Shoes that you have purchased!
+
+<table>
+    <tr>
+        <th>Shoe Name</th>
+        <th>Price</th>
+        <th>Seller</th>
+    </tr>
+    <% @buyer.each do |buyer| %>
+      <% if buyer.user_id == @user.id %>
+        <% @shoes.each do |shoe| %>
+        <% if shoe.id == buyer.shoe_id %>
+            <tr>
+                <td><%= shoe.name %></td>
+                <td><%= shoe.price %></td>
+                <td><%= shoe.user.first_name %></td>
+
+        <% end %>
+      <% end %>
+      <% end %>
+      <% end %>
+</table>
